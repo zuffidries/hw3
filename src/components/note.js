@@ -24,7 +24,7 @@ const Note = (props) => {
     props.editNote(false);
   };
   const onEditContent = (event) => {
-    props.editContent(event.target.value);
+    props.editNoteContent(event.target.value);
   };
   const renderNotes = () => {
     if (props.note.isEditing) {
@@ -34,8 +34,8 @@ const Note = (props) => {
             <div>{props.note.title}</div>
             <i onClick={onDeleteNote} className="fa fa-trash" />
             <i onClick={onSaveEdit} className="fa fa-check" />
-            <i className="fa fa-arrows" />
-            <div className="noteContent" onChange={onEditContent} />
+            <i className="note-mover fa fa-arrows" />
+            <input className="noteContent" onChange={onEditContent} />
           </div>
         </div>
       );
@@ -46,7 +46,7 @@ const Note = (props) => {
           <div>{props.note.title}</div>
           <i onClick={onDeleteNote} className="fa fa-trash" />
           <i onClick={onEditNote} className="fa fa-pencil" />
-          <i className="fa fa-arrows" />
+          <i className="note-mover fa fa-arrows" />
           <div className="noteContent" onChange={onEditContent} />
           <div className="noteBody" dangerouslySetInnerHTML={{ __html: marked(props.note.content || '') }} />
         </div>
