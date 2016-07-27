@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Immutable from 'immutable';
+import * as firebasedb from '../firebasedb';
 
 import NoteBar from './note_bar';
 import Note from './note';
@@ -16,7 +17,16 @@ class App extends Component {
       id: 0,
     };
   }
+  componentDidMount() {
+    const updateNotes = newNotes => {
+      this.setState({
+        notes: Immutable.Map(newNotes),
+      });
+    };
+    firebasedb.fetchNotes(updateNotes);
+  }
   deleteNote(id) {
+    firebasedb.deleteNote(id);
     this.setState({
       notes: this.state.notes.delete(id),
     });
@@ -30,28 +40,32 @@ class App extends Component {
       zIndex: 0,
       isEditing: false,
     };
+    firebasedb.pushNote(noteObject);
     this.setState({
       id: this.state.i++,
       notes: this.state.notes.set(this.state.id, noteObject),
     });
   }
   editNote(id, isEditing) {
+    firebasedb.updateNote(id, isEditing);
     this.setState({
-      notes: this.state.notes.update(id, (n) => {
+      notes: this.state.notes.update(id, n => {
         return Object.assign({}, n, { isEditing });
       }),
     });
   }
   editNoteContent(id, content) {
+    firebasedb.updateContent(id, content);
     this.setState({
-      notes: this.state.notes.update(id, (n) => {
+      notes: this.state.notes.update(id, n => {
         return Object.assign({}, n, { content });
       }),
     });
   }
   moveNote(id, x, y) {
+    firebasedb.moveNote(id, x, y);
     this.setState({
-      notes: this.state.notes.update(id, (n) => {
+      notes: this.state.notes.update(id, n => {
         return Object.assign({}, n, { x }, { y });
       }),
     });
